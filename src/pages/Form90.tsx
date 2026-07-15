@@ -262,10 +262,20 @@ export function Form90() {
                   <NumberInput label="เบี้ยประกันสุขภาพ" value={field.value} onChangeValue={field.onChange} />
                 )} />
                 <Controller control={form.control} name="allowances.ssf" render={({ field }) => (
-                  <NumberInput label="กองทุนรวม SSF" value={field.value} onChangeValue={field.onChange} />
+                  <NumberInput
+                    label="กองทุนรวม SSF"
+                    helperText="กองทุนรวมเพื่อส่งเสริมการออมระยะยาว (ถือหน่วยลงทุนอย่างน้อย 10 ปี ไม่มีขั้นต่ำ ไม่ต้องซื้อทุกปี) — ลดหย่อนได้ไม่เกิน 30% ของรายได้ และสูงสุดไม่เกิน 200,000 บาท"
+                    value={field.value}
+                    onChangeValue={field.onChange}
+                  />
                 )} />
                 <Controller control={form.control} name="allowances.rmf" render={({ field }) => (
-                  <NumberInput label="กองทุนรวม RMF" value={field.value} onChangeValue={field.onChange} />
+                  <NumberInput
+                    label="กองทุนรวม RMF"
+                    helperText="กองทุนรวมเพื่อการเลี้ยงชีพ เพื่อการออมไว้เกษียณ (ถืออย่างน้อย 5 ปี และอายุครบ 55 ปีบริบูรณ์ ต้องซื้อต่อเนื่องทุกปี) — ลดหย่อนได้ไม่เกิน 30% ของรายได้ และสูงสุดไม่เกิน 500,000 บาท"
+                    value={field.value}
+                    onChangeValue={field.onChange}
+                  />
                 )} />
                 <Controller control={form.control} name="allowances.providentFund" render={({ field }) => (
                   <NumberInput label="กองทุนสำรองเลี้ยงชีพ" value={field.value} onChangeValue={field.onChange} />
