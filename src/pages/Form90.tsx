@@ -5,7 +5,7 @@ import { formSchema, TaxFormValues } from '../lib/schema';
 import { calculateTax } from '../lib/taxCalculation';
 import { TaxSummary } from '../components/TaxSummary';
 import { NumberInput, FormSection, SwitchToggle } from '../components/FormElements';
-import { Briefcase, Heart, PiggyBank, Home, User, ArrowLeft, Layers, Percent } from 'lucide-react';
+import { Briefcase, Heart, PiggyBank, Home, User, ArrowLeft, Layers, Percent, FileText } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { ThemeToggle } from '../components/ThemeToggle';
 
