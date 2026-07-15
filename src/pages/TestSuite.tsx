@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { 
   Play, 
   RotateCcw, 
@@ -321,6 +321,7 @@ function generateCombinatorialCases(): TestCase[] {
 }
 
 export function TestSuite() {
+  const [location] = useLocation();
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return sessionStorage.getItem('isAdminAuthenticated') === 'true';
@@ -657,7 +658,20 @@ export function TestSuite() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            <nav className="hidden md:flex items-center gap-4 sm:gap-6 mr-4">
+              <Link href="/91" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/91' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 91
+              </Link>
+              <Link href="/90" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/90' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 90
+              </Link>
+              <Link href="/94" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/94' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 94
+              </Link>
+            </nav>
+            <div className="border-r border-border pr-4 mr-2">
+              <ThemeToggle />
+            </div>
             <Button variant="ghost" size="sm" onClick={() => {
               setIsAdminAuthenticated(false);
               sessionStorage.removeItem('isAdminAuthenticated');

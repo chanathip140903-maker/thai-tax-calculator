@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { 
   FileText, Briefcase, User, CalendarDays, ArrowRight, BookOpen, 
   Heart, Layers, Scale, DollarSign, Wallet, TrendingUp, Info, HelpCircle 
@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 export function Home() {
+  const [location] = useLocation();
   const [monthlySalary, setMonthlySalary] = useState<number>(30000);
   const [extraDeductions, setExtraDeductions] = useState<number>(0);
 
@@ -76,7 +77,7 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="bg-card border-b border-border py-5 px-6 shadow-sm sticky top-0 z-10">
+      <header className="bg-card border-b border-border py-4 px-6 shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group cursor-pointer select-none">
             <div className="bg-primary p-2.5 rounded-xl text-primary-foreground shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg">
@@ -87,8 +88,21 @@ export function Home() {
               <p className="text-xs text-muted-foreground mt-1 font-medium">โปรแกรมวางแผนและคำนวณภาษีเงินได้บุคคลธรรมดา</p>
             </div>
           </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <nav className="flex items-center gap-4 sm:gap-6">
+              <Link href="/91" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/91' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 91
+              </Link>
+              <Link href="/90" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/90' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 90
+              </Link>
+              <Link href="/94" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/94' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 94
+              </Link>
+            </nav>
+            <div className="border-l border-border pl-4">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>

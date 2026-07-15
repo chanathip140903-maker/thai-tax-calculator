@@ -6,10 +6,11 @@ import { calculateTax } from '../lib/taxCalculation';
 import { TaxSummary } from '../components/TaxSummary';
 import { NumberInput, FormSection, SwitchToggle } from '../components/FormElements';
 import { Briefcase, Heart, PiggyBank, Home, User, ArrowLeft } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { ThemeToggle } from '../components/ThemeToggle';
 
 export function Form91() {
+  const [location] = useLocation();
   const form = useForm<TaxFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,19 +47,44 @@ export function Form91() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="bg-primary text-primary-foreground py-10 px-6 mb-8">
-        <div className="max-w-5xl mx-auto flex justify-between items-start gap-4">
-          <div>
-            <Link href="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              กลับหน้าแรก
-            </Link>
-            <h1 className="text-3xl font-bold mb-2">คำนวณภาษี ภ.ง.ด. 91</h1>
-            <p className="text-primary-foreground/80 text-lg">สำหรับผู้มีรายได้จากเงินเดือนประจำเพียงอย่างเดียว (มาตรา 40(1))</p>
+      <header className="bg-card border-b border-border py-4 px-6 shadow-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer select-none">
+            <div className="bg-primary p-2.5 rounded-xl text-primary-foreground shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">ThaiTax</h1>
+              <p className="text-xs text-muted-foreground mt-1 font-medium">โปรแกรมวางแผนและคำนวณภาษีเงินได้บุคคลธรรมดา</p>
+            </div>
+          </Link>
+          <div className="flex items-center gap-4">
+            <nav className="flex items-center gap-4 sm:gap-6">
+              <Link href="/91" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/91' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 91
+              </Link>
+              <Link href="/90" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/90' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 90
+              </Link>
+              <Link href="/94" className={`text-sm transition-all cursor-pointer font-semibold ${location === '/94' ? 'text-primary border-b-2 border-primary pb-0.5' : 'text-muted-foreground hover:text-foreground font-medium'}`}>
+                ภ.ง.ด. 94
+              </Link>
+            </nav>
+            <div className="border-l border-border pl-4">
+              <ThemeToggle />
+            </div>
           </div>
-          <div className="bg-white/10 hover:bg-white/20 p-1 rounded-xl transition-all">
-            <ThemeToggle />
-          </div>
+        </div>
+      </header>
+
+      <div className="max-w-5xl mx-auto px-6 pt-8 pb-4">
+        <div className="border-b border-border/65 pb-5">
+          <Link href="/" className="inline-flex items-center text-xs text-muted-foreground hover:text-primary mb-3 transition-colors font-medium">
+            <ArrowLeft className="w-3.5 h-3.5 mr-1" />
+            กลับหน้าหลัก
+          </Link>
+          <h2 className="text-3xl font-extrabold text-foreground tracking-tight">คำนวณภาษี ภ.ง.ด. 91</h2>
+          <p className="text-sm text-muted-foreground mt-1">สำหรับผู้มีรายได้จากเงินเดือนประจำเพียงอย่างเดียว (มาตรา 40(1))</p>
         </div>
       </div>
 
