@@ -78,15 +78,15 @@ export function Home() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="bg-card border-b border-border py-5 px-6 shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary p-2.5 rounded-xl text-primary-foreground shadow-md">
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer select-none">
+            <div className="bg-primary p-2.5 rounded-xl text-primary-foreground shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg">
               <FileText className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-foreground leading-none">ThaiTax</h1>
+              <h1 className="text-xl font-bold tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">ThaiTax</h1>
               <p className="text-xs text-muted-foreground mt-1 font-medium">โปรแกรมวางแผนและคำนวณภาษีเงินได้บุคคลธรรมดา</p>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle />
           </div>

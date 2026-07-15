@@ -647,11 +647,13 @@ export function TestSuite() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                <ShieldCheck className="w-6 h-6 text-primary" />
-                ระบบทดสอบคำนวณภาษี
-              </h1>
-              <p className="text-xs text-muted-foreground">ตรวจสอบความถูกต้องและรายละเอียดการกรอกแบบฟอร์มภาษี</p>
+              <Link href="/" className="flex items-center gap-2 group cursor-pointer select-none">
+                <ShieldCheck className="w-6 h-6 text-primary transition-transform group-hover:scale-105" />
+                <h1 className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                  ระบบทดสอบคำนวณภาษี
+                </h1>
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">ตรวจสอบความถูกต้องและรายละเอียดการกรอกแบบฟอร์มภาษี</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
