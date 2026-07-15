@@ -17,13 +17,15 @@ import {
   Heart,
   Layers,
   BookOpen,
-  Scale
+  Scale,
+  Lock
 } from 'lucide-react';
 import { calculateTax, formatTHB, Income, Allowances, CalculationResult } from '@/lib/taxCalculation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface TestCase {
   id: number;
@@ -319,6 +321,15 @@ function generateCombinatorialCases(): TestCase[] {
 }
 
 export function TestSuite() {
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('isAdminAuthenticated') === 'true';
+    }
+    return false;
+  });
+  const [adminPassword, setAdminPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const [testCases, setTestCases] = useState<TestCase[]>(initialTestCases);
   const [testResults, setTestResults] = useState<Record<number, {
     passed: boolean;
@@ -566,6 +577,67 @@ export function TestSuite() {
     }
   };
 
+  const handleAuthSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === 'admin1234') {
+      setIsAdminAuthenticated(true);
+      sessionStorage.setItem('isAdminAuthenticated', 'true');
+      setAuthError('');
+    } else {
+      setAuthError('รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+    }
+  };
+
+  if (!isAdminAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col justify-center items-center px-6">
+        <Card className="max-w-md w-full border border-border shadow-2xl p-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-[100px] -z-0"></div>
+          <CardHeader className="text-center pb-6">
+            <div className="bg-primary/10 text-primary p-3 rounded-full w-fit mx-auto mb-4 border border-primary/20">
+              <Lock className="w-6 h-6" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-foreground">ระบบทดสอบผู้ดูแลระบบ (Admin Only)</CardTitle>
+            <CardDescription className="text-sm text-muted-foreground mt-1">
+              ส่วนนี้จำกัดเฉพาะนักพัฒนาและผู้ดูแลระบบเท่านั้น กรุณากรอกรหัสผ่านเพื่อเข้าใช้งาน
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleAuthSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-muted-foreground block">
+                  รหัสผ่านแอดมิน
+                </label>
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  placeholder="กรอกรหัสผ่าน (เริ่มต้น: admin1234)"
+                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-card text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-sm font-medium"
+                />
+              </div>
+
+              {authError && (
+                <p className="text-xs font-semibold text-destructive text-center animate-in shake duration-200">
+                  ⚠️ {authError}
+                </p>
+              )}
+
+              <Button type="submit" className="w-full rounded-xl py-2.5 font-bold shadow-md">
+                เข้าสู่ระบบทดสอบ
+              </Button>
+            </form>
+          </CardContent>
+          <CardFooter className="justify-center border-t border-border/50 pt-4 mt-2">
+            <Link href="/" className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5 font-medium">
+              <ArrowLeft className="w-3.5 h-3.5" /> กลับสู่หน้าหลักผู้ใช้งาน
+            </Link>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="bg-card border-b border-border py-4 px-6 shadow-sm sticky top-0 z-10">
@@ -583,6 +655,13 @@ export function TestSuite() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button variant="ghost" size="sm" onClick={() => {
+              setIsAdminAuthenticated(false);
+              sessionStorage.removeItem('isAdminAuthenticated');
+            }} className="text-muted-foreground hover:text-destructive transition-colors mr-2" title="ออกจากระบบผู้ดูแลระบบ">
+              <Lock className="w-4 h-4 mr-1.5" /> ล็อคระบบ
+            </Button>
             <Button variant="outline" size="sm" onClick={resetTests} disabled={isRunning || summary.runCount === 0}>
               <RotateCcw className="w-4 h-4 mr-1.5" /> รีเซ็ต
             </Button>
@@ -1119,26 +1198,36 @@ export function TestSuite() {
                   </CardTitle>
                   <CardDescription className="text-[10px]">สิทธิลดหย่อนพื้นฐานสำหรับผู้มีเงินได้และครอบครัว</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2 text-xs">
-                  <div className="flex justify-between border-b border-border/40 pb-1.5 text-[11px]">
-                    <span className="text-muted-foreground">ลดหย่อนส่วนตัว (ผู้มีเงินได้)</span>
-                    <span className="font-semibold text-foreground">60,000 บาท/ปี (ยื่นครึ่งปีลดเหลือ 30,000 บาท)</span>
+                <CardContent className="space-y-3 text-xs">
+                  <div className="grid grid-cols-12 gap-2 border-b border-border/40 pb-2 text-[11px] items-start">
+                    <span className="col-span-6 text-muted-foreground font-medium">ลดหย่อนส่วนตัว (ผู้มีเงินได้)</span>
+                    <span className="col-span-6 text-right font-semibold text-foreground leading-tight">
+                      60,000 บาท/ปี <span className="text-[10px] text-muted-foreground font-normal block sm:inline">(ครึ่งปี 30,000 บาท)</span>
+                    </span>
                   </div>
-                  <div className="flex justify-between border-b border-border/40 pb-1.5 text-[11px]">
-                    <span className="text-muted-foreground">คู่สมรส (จดทะเบียน และไม่มีรายได้)</span>
-                    <span className="font-semibold text-foreground">60,000 บาท/ปี (ยื่นครึ่งปีลดเหลือ 30,000 บาท)</span>
+                  <div className="grid grid-cols-12 gap-2 border-b border-border/40 pb-2 text-[11px] items-start">
+                    <span className="col-span-6 text-muted-foreground font-medium">คู่สมรส (ไม่มีรายได้)</span>
+                    <span className="col-span-6 text-right font-semibold text-foreground leading-tight">
+                      60,000 บาท/ปี <span className="text-[10px] text-muted-foreground font-normal block sm:inline">(ครึ่งปี 30,000 บาท)</span>
+                    </span>
                   </div>
-                  <div className="flex justify-between border-b border-border/40 pb-1.5 text-[11px]">
-                    <span className="text-muted-foreground">บุตรคนที่ 1 และคนที่ 2 ขึ้นไป</span>
-                    <span className="font-semibold text-foreground">คนแรก 30,000 บาท / คนถัดไปคนละ 60,000 บาท</span>
+                  <div className="grid grid-cols-12 gap-2 border-b border-border/40 pb-2 text-[11px] items-start">
+                    <span className="col-span-6 text-muted-foreground font-medium">บุตรคนที่ 1 และคนถัดไป</span>
+                    <span className="col-span-6 text-right font-semibold text-foreground leading-tight">
+                      คนแรก 30,000 บาท <span className="text-[10px] text-muted-foreground font-normal block">คนถัดไปคนละ 60,000 บาท</span>
+                    </span>
                   </div>
-                  <div className="flex justify-between border-b border-border/40 pb-1.5 text-[11px]">
-                    <span className="text-muted-foreground">อุปการะบิดามารดา (อายุ 60 ปีขึ้นไป และรายได้ไม่เกิน 30k)</span>
-                    <span className="font-semibold text-foreground">คนละ 30,000 บาท (สูงสุดคนละ 4 ท่าน)</span>
+                  <div className="grid grid-cols-12 gap-2 border-b border-border/40 pb-2 text-[11px] items-start">
+                    <span className="col-span-6 text-muted-foreground font-medium">อุปการะบิดามารดา (60 ปีขึ้นไป)</span>
+                    <span className="col-span-6 text-right font-semibold text-foreground leading-tight">
+                      คนละ 30,000 บาท <span className="text-[10px] text-muted-foreground font-normal block">(สูงสุด 4 ท่าน)</span>
+                    </span>
                   </div>
-                  <div className="flex justify-between pb-1 text-[11px]">
-                    <span className="text-muted-foreground">อุปการะผู้พิการหรือทุพพลภาพ</span>
-                    <span className="font-semibold text-foreground">คนละ 60,000 บาท</span>
+                  <div className="grid grid-cols-12 gap-2 pb-1 text-[11px] items-start">
+                    <span className="col-span-6 text-muted-foreground font-medium">อุปการะผู้พิการ/ทุพพลภาพ</span>
+                    <span className="col-span-6 text-right font-semibold text-foreground leading-tight">
+                      คนละ 60,000 บาท
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -1158,18 +1247,24 @@ export function TestSuite() {
                       ยอดรวมของกองทุนลดหย่อนภาษีกลุ่มนี้ ได้แก่ **SSF + RMF + ประกันบำนาญ + กองทุนสำรองเลี้ยงชีพ (PVD)** รวมกันทั้งหมดแล้ว ต้องมีมูลค่าหักลดหย่อนจริงไม่เกิน **500,000 บาท**
                     </p>
                   </div>
-                  <div className="space-y-1.5 text-[11px]">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">กองทุน SSF:</span>
-                      <span className="font-semibold text-foreground">หักได้สูงสุด 30% ของรายได้ ไม่เกิน 200,000 บาท</span>
+                  <div className="space-y-2 text-[11px]">
+                    <div className="grid grid-cols-12 gap-2 border-b border-border/30 pb-1.5 items-start">
+                      <span className="col-span-4 text-muted-foreground font-medium">กองทุน SSF:</span>
+                      <span className="col-span-8 text-right font-semibold text-foreground leading-tight">
+                        สูงสุด 30% ของรายได้ <span className="text-[10px] text-muted-foreground font-normal block">(ไม่เกิน 200,000 บาท)</span>
+                      </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">กองทุน RMF:</span>
-                      <span className="font-semibold text-foreground">หักได้สูงสุด 30% ของรายได้ ไม่เกิน 500,000 บาท</span>
+                    <div className="grid grid-cols-12 gap-2 border-b border-border/30 pb-1.5 items-start">
+                      <span className="col-span-4 text-muted-foreground font-medium">กองทุน RMF:</span>
+                      <span className="col-span-8 text-right font-semibold text-foreground leading-tight">
+                        สูงสุด 30% ของรายได้ <span className="text-[10px] text-muted-foreground font-normal block">(ไม่เกิน 500,000 บาท)</span>
+                      </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">ประกันบำนาญ:</span>
-                      <span className="font-semibold text-foreground">หักได้สูงสุด 15% ของรายได้ ไม่เกิน 200,000 บาท</span>
+                    <div className="grid grid-cols-12 gap-2 pb-1 items-start">
+                      <span className="col-span-4 text-muted-foreground font-medium">ประกันบำนาญ:</span>
+                      <span className="col-span-8 text-right font-semibold text-foreground leading-tight">
+                        สูงสุด 15% ของรายได้ <span className="text-[10px] text-muted-foreground font-normal block">(ไม่เกิน 200,000 บาท)</span>
+                      </span>
                     </div>
                   </div>
                 </CardContent>

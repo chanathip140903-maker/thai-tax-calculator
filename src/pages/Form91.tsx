@@ -7,6 +7,7 @@ import { TaxSummary } from '../components/TaxSummary';
 import { NumberInput, FormSection, SwitchToggle } from '../components/FormElements';
 import { Briefcase, Heart, PiggyBank, Home, User, ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export function Form91() {
   const form = useForm<TaxFormValues>({
@@ -38,7 +39,7 @@ export function Form91() {
   });
 
   const values = form.watch();
-  
+
   const result = React.useMemo(() => {
     return calculateTax(values.income, values.allowances, false);
   }, [values]);
@@ -46,20 +47,25 @@ export function Form91() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="bg-primary text-primary-foreground py-10 px-6 mb-8">
-        <div className="max-w-5xl mx-auto">
-          <Link href="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            กลับหน้าแรก
-          </Link>
-          <h1 className="text-3xl font-bold mb-2">คำนวณภาษี ภ.ง.ด. 91</h1>
-          <p className="text-primary-foreground/80 text-lg">สำหรับผู้มีรายได้จากเงินเดือนประจำเพียงอย่างเดียว (มาตรา 40(1))</p>
+        <div className="max-w-5xl mx-auto flex justify-between items-start gap-4">
+          <div>
+            <Link href="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              กลับหน้าแรก
+            </Link>
+            <h1 className="text-3xl font-bold mb-2">คำนวณภาษี ภ.ง.ด. 91</h1>
+            <p className="text-primary-foreground/80 text-lg">สำหรับผู้มีรายได้จากเงินเดือนประจำเพียงอย่างเดียว (มาตรา 40(1))</p>
+          </div>
+          <div className="bg-white/10 hover:bg-white/20 p-1 rounded-xl transition-all">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Left Col - Forms */}
         <div className="lg:col-span-8 space-y-10 bg-card p-8 rounded-2xl shadow-sm border border-border">
-          
+
           <FormSection title="รายได้จากงานประจำ (มาตรา 40(1))" description="เงินเดือน โบนัส ค่าล่วงเวลา ตลอดทั้งปี" icon={Briefcase}>
             <div className="grid gap-6 sm:grid-cols-2">
               <Controller
@@ -120,7 +126,7 @@ export function Form91() {
                   name="allowances.children_1"
                   render={({ field }) => (
                     <NumberInput
-                      label="จำนวนบุตรคนที่ 1 หรือเกิดก่อนปี 2561"
+                      label="จำนวนบุตรเกิดก่อนปี 2561"
                       helperText="ลดหย่อนคนละ 30,000 บาท"
                       value={field.value}
                       onChangeValue={field.onChange}
@@ -133,7 +139,7 @@ export function Form91() {
                   name="allowances.children_2_plus"
                   render={({ field }) => (
                     <NumberInput
-                      label="จำนวนบุตรคนที่ 2 ขึ้นไป (เกิดตั้งแต่ 2561)"
+                      label="จำนวนบุตรที่เกิดตั้งแต่ปี 2561 ขึ้นไป"
                       helperText="ลดหย่อนคนละ 60,000 บาท"
                       value={field.value}
                       onChangeValue={field.onChange}

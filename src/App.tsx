@@ -9,6 +9,31 @@ import { Form90 } from './pages/Form90';
 import { Form94 } from './pages/Form94';
 import { TestSuite } from './pages/TestSuite';
 
+import { useEffect, useState } from 'react';
+
+// Custom hook to support hash-based routing (e.g. /#/test-suite) to fix GitHub Pages SPA 404 errors on reload
+const currentLoc = () => {
+  const hash = window.location.hash;
+  if (!hash) return "/";
+  return hash.replace(/^#/, "");
+};
+
+export const useHashLocation = () => {
+  const [loc, setLoc] = useState(currentLoc);
+
+  useEffect(() => {
+    const handler = () => setLoc(currentLoc());
+    window.addEventListener("hashchange", handler);
+    return () => window.removeEventListener("hashchange", handler);
+  }, []);
+
+  const navigate = (to: string) => {
+    window.location.hash = to;
+  };
+
+  return [loc, navigate] as [string, (to: string) => void];
+};
+
 const queryClient = new QueryClient();
 
 function Router() {
@@ -28,7 +53,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+        <WouterRouter hook={useHashLocation}>
           <Router />
         </WouterRouter>
         <Toaster />

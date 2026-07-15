@@ -73,7 +73,7 @@ export function NumberInput({ label, helperText, error, value, onChangeValue, cl
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder="0"
-          className="flex h-11 w-full rounded-md border border-input bg-card px-4 py-2 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50 text-right pr-12 font-mono"
+          className="flex h-11 w-full rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 px-4 py-2 text-base shadow-sm transition-all placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 text-right pr-12 font-mono text-foreground"
           {...props}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-muted-foreground text-sm font-medium">
@@ -111,13 +111,15 @@ export function SwitchToggle({ label, helperText, checked, onChangeChecked }: To
         role="switch"
         aria-checked={checked}
         onClick={() => onChangeChecked(!checked)}
-        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-          checked ? 'bg-primary' : 'bg-input'
+        className={`peer inline-flex h-6 w-11 px-0.5 shrink-0 cursor-pointer items-center rounded-full border shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
+          checked
+            ? 'bg-primary border-transparent'
+            : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-600'
         }`}
       >
         <span
-          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-            checked ? 'translate-x-5' : 'translate-x-0'
+          className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform ${
+            checked ? 'translate-x-[22px]' : 'translate-x-0'
           }`}
         />
       </button>

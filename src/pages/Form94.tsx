@@ -7,6 +7,7 @@ import { TaxSummary } from '../components/TaxSummary';
 import { NumberInput, FormSection, SwitchToggle } from '../components/FormElements';
 import { Heart, PiggyBank, Home, User, ArrowLeft, Clock, AlertTriangle } from 'lucide-react';
 import { Link } from 'wouter';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export function Form94() {
   const form = useForm<TaxFormValues>({
@@ -59,16 +60,21 @@ export function Form94() {
         <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
           <Clock className="w-64 h-64" />
         </div>
-        <div className="max-w-5xl mx-auto relative z-10">
-          <Link href="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            กลับหน้าแรก
-          </Link>
-          <div className="flex items-start gap-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">คำนวณภาษีครึ่งปี ภ.ง.ด. 94</h1>
-              <p className="text-primary-foreground/80 text-lg">สำหรับรายได้มาตรา 40(5) - 40(8) ที่เกิดขึ้นระหว่าง ม.ค. - มิ.ย.</p>
+        <div className="max-w-5xl mx-auto relative z-10 flex justify-between items-start gap-4">
+          <div>
+            <Link href="/" className="inline-flex items-center text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              กลับหน้าแรก
+            </Link>
+            <div className="flex items-start gap-4">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">คำนวณภาษีครึ่งปี ภ.ง.ด. 94</h1>
+                <p className="text-primary-foreground/80 text-lg">สำหรับรายได้มาตรา 40(5) - 40(8) ที่เกิดขึ้นระหว่าง ม.ค. - มิ.ย.</p>
+              </div>
             </div>
+          </div>
+          <div className="bg-white/10 hover:bg-white/20 p-1 rounded-xl transition-all">
+            <ThemeToggle />
           </div>
         </div>
       </div>
